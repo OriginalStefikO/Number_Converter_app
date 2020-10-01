@@ -1,29 +1,28 @@
-from tkinter import READABLE
 import PySimpleGUI as sg
 
+sg.theme('Topanga')
 layout = [[(sg.Text('Napiš \nBinToDec/DecToBin/DecToHex/HexToDec/BinToHex/HexToBin/BinToText/TextToBin/HexToText/TextToHex\npro převod z dané soustavy.', size=[80, 3]))],
             [sg.InputText(size=(40, 1), do_not_clear=False)],
             [sg.Text('Sem napiš své číslo:', size=(40, 1))],
             [sg.InputText(size=(40, 1),do_not_clear=False)],
-            [sg.Multiline(size=(80,15), auto_refresh=True, reroute_stdout=True, reroute_cprint=True, disabled=True)],
-            [sg.Button('SEND', button_color=(sg.YELLOWS[0], sg.BLUES[0]),bind_return_key=True),
-            sg.Button('EXIT', button_color=(sg.YELLOWS[0], sg.GREENS[0]))]]
+            [sg.Multiline(size=(80,15), auto_refresh=True, reroute_stdout=True, reroute_cprint=True, disabled=True, autoscroll=True)],
+            [sg.Button('OK',bind_return_key=True),
+            sg.Button('Exit')]]
 
-window = sg.Window('Chat Window', layout, default_element_size=(30, 2))
+window = sg.Window('Convertor 1.0.0', layout, default_element_size=(30, 2))
 
-
-# ---===--- Loop taking in user input and using it to query HowDoI web oracle --- #
 def restartf():
     while True:
 
         event, value = window.read()
-        if event == 'SEND':
+        
+        if event == 'OK':
 
 
-            if value[1] == '':
-
-                print("Musíš napsat číslo na konvertování!")
-                restartf()
+            if value[0] != "Help":
+                if value[1] == '':
+                    print("Musíš napsat číslo na konvertování!")
+                    restartf()
             if value[0] == "BinToDec":
                 def bindec(n): 
                     return int(n, 2)
@@ -90,9 +89,22 @@ def restartf():
                     return ''.join(chr(int(s[i*8:i*8+8],2)) for i in range(len(s)//8))
                 print("Tvůj text je:\n",decode_binary_string("0" + bide), "\n")
 
+            elif value[0] == "Help":
+                print("BinToDec\n   Z binární soustavy do decimální")
+                print("DecToBin\n   Z decimální soustavy do binární")
+                print("BinToHex\n   Z binární soustavy do hexadecimální")
+                print("HexToBin\n   Z hexadecimální soustavy do binární")
+                print("DecToHex\n   Z decimální soustavy do hexadecimální")
+                print("HexToDec\n   Z hexadecimální soustavy do decimální")
+                print("BinToText\n   Z binární soustavy do textu")
+                print("TextToBin\n  Z textu do binární soustavy")
+                print("HexToText\n  Z hexadecimální soustavy do textu")
+                print("TextToHex\n  Z textu do hexadecimální soustavy")
             else:
-                print("I don't have this command.")
-        if event == sg.WIN_CLOSED or event == 'EXIT':
+                print("Nemám tenhle příkaz.")
+        if event == sg.WIN_CLOSED or event == 'Exit':
+            window.close()
             break
+    
     window.close()
 restartf()
